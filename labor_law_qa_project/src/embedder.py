@@ -1,15 +1,21 @@
+# src/embedder.py
 from transformers import AutoTokenizer, AutoModel
 import torch
-
-from config import EMBEDDING_MODEL
+import numpy as np
 
 class Embedder:
     def __init__(self):
-        self.tokenizer = AutoTokenizer.from_pretrained(EMBEDDING_MODEL)
-        self.model = AutoModel.from_pretrained(EMBEDDING_MODEL)
+        model_name_or_path = 'moka-ai/m3e-base'  # HuggingFace模型名字
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, trust_remote_code=True)
+        self.model = AutoModel.from_pretrained(model_name_or_path, trust_remote_code=True)
 
     def embed(self, text):
-        tokens = self.tokenizer(text, return_tensors='pt', truncation=True, padding=True)
+        if isinstance(text, list):
+            tokens = self.tokenizer(text, padding=True, truncation=True, return_tensors='pt')
+        else:
+            tokens = self.tokenizer([text], padding=True, truncation=True, return_tensors='pt')
+
         with torch.no_grad():
-            embedding = self.model(**tokens).last_hidden_state.mean(dim=1).squeeze()
-        return embedding.numpy()
+            embeddings = self.model(**tokens).last_hidden_state.mean(dim=1)
+
+        return embeddings.squeeze().cpu().numpy()
