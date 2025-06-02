@@ -14,3 +14,5 @@
 
 ```bash
 pip install -r requirements.txt
+
+拿到m3e-base向量模型吗，置于工程目录m3e-base目录下

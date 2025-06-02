@@ -2,12 +2,17 @@
 from transformers import AutoTokenizer, AutoModel
 import torch
 import numpy as np
+import os
 
 class Embedder:
     def __init__(self):
-        model_name_or_path = 'moka-ai/m3e-base'  # HuggingFace模型名字
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, trust_remote_code=True)
-        self.model = AutoModel.from_pretrained(model_name_or_path, trust_remote_code=True)
+        # 获取当前工程根目录
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        # 拼接成绝对路径，适配 Windows/Linux
+        model_dir = os.path.join(project_root, 'm3e-base')
+
+        self.tokenizer = AutoTokenizer.from_pretrained(model_dir, trust_remote_code=True)
+        self.model = AutoModel.from_pretrained(model_dir, trust_remote_code=True)
 
     def embed(self, text):
         if isinstance(text, list):
