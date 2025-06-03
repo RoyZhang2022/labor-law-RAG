@@ -18,22 +18,27 @@
 ## 📦 快速部署指南
 
 ### 克隆项目
-```bash
+```
 git clone https://github.com/RoyZhang2022/labor-law-RAG.git
+```
 
 1. 到hugging face去下载moka-ai/m3e-base向量检索模型，将其放置于m3e-base目录下。
 
 2. 安装依赖
 创建虚拟环境并安装：
 
+```
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
 
 3. 配置环境变量
 新建 .env 文件（推荐），或者直接编辑：
 
+```
 sudo nano /etc/qa-api.env
+```
 
 写入你的智谱API Key：
 
@@ -41,9 +46,12 @@ GLM4_API_KEY=你的真实APIKey
 
 4. 配置 Systemd 服务
 新建 qa-api.service 文件：
+```
 sudo nano /etc/systemd/system/qa-api.service
+```
 
 填入以下内容（注意路径根据实际情况调整）：
+```
 [Unit]
 Description=QA API Service
 After=network.target
@@ -58,15 +66,21 @@ RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
+```
 
 5. 配置 Nginx
+```
 sudo apt update
 sudo apt install nginx -y
+```
 
 创建 Nginx 配置文件：
+```
 sudo nano /etc/nginx/sites-available/qa-api
+```
 
 内容如下：
+```
 server {
     listen 80;
     server_name _;
@@ -91,32 +105,42 @@ sudo rm -f /etc/nginx/sites-enabled/default
 sudo ln -s /etc/nginx/sites-available/qa-api /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
+```
 
 6. 部署前端网页
+```
 sudo mkdir -p /var/www/html
 sudo cp frontend/simple_ui.html /var/www/html/index.html
+```
 
 7. 启动后端服务
+```
 sudo systemctl daemon-reload
 sudo systemctl enable qa-api
 sudo systemctl start qa-api
+```
 
 8. 浏览器访问
 打开浏览器，访问你的服务器公网IP：
 http://你的服务器IP/
 输入问题，比如：
 
+```
 劳动合同最长可以签多久？
+```
 
 ✅ 即可返回专业回答。
 
 常见问题 FAQ
+```
 问题 | 解决办法
 500 Internal Server Error | 确认 .env 配置了正确的 API Key，确认服务器能出网
 网页提交没响应	| 检查浏览器 Network 请求，确认返回 200
 向量检索无结果 | 确认知识库已构建完成，FAISS index 正常
+```
 
 TODO List
+```
  支持本地部署版 Qwen2-1.5B 微型模型
 
  支持聊天历史记录上下文
@@ -124,6 +148,7 @@ TODO List
  支持Docker一键打包部署
 
  后台管理界面：上传新知识文件，自动增量向量更新
+```
 
 作者
 RoyZhang2022
