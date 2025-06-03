@@ -1,0 +1,13 @@
+[Unit]
+Description=QA API Service
+After=network.target
+
+[Service]
+User=roy
+WorkingDirectory=/home/roy/MyFirstAI/labor_law_qa_project
+ExecStart=/home/roy/MyFirstAI/venv/bin/uvicorn api_server:app --host 0.0.0.0 --port 8000 --workers 1
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
