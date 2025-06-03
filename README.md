@@ -17,10 +17,11 @@
 
 ## 📦 快速部署指南
 
-### 1️⃣ 克隆项目
+### 克隆项目
 ```bash
-git clone https://github.com/你的github用户名/你的仓库.git
-cd labor-law-qa-project
+git clone https://github.com/RoyZhang2022/labor-law-RAG.git
+
+1. 到hugging face去下载moka-ai/m3e-base向量检索模型，将其放置于m3e-base目录下。
 
 2. 安装依赖
 创建虚拟环境并安装：
