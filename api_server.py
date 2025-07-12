@@ -21,8 +21,18 @@ def load_documents(filepath):
 start_time = time.time()
 project_root = os.path.dirname(os.path.abspath(__file__))
 file_path = os.path.join(project_root, 'data', 'documents.txt')
+
+print("file path is ", file_path)
+print("loading documents...")
 documents = load_documents(file_path)
+print(f"loaded {len(documents)} documents")
+
 qa_pipeline.build_knowledge_base(documents)
+print("knowledge base built")
+
+#documents = load_documents(file_path)
+#qa_pipeline.build_knowledge_base(documents)
+
 print(f"QA系统启动完成，耗时 {time.time() - start_time:.2f} 秒")
 
 class QueryRequest(BaseModel):
