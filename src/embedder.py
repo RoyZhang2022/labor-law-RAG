@@ -9,10 +9,15 @@ class Embedder:
         # 获取当前工程根目录
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         # 拼接成绝对路径，适配 Windows/Linux
-        model_dir = os.path.join(project_root, 'm3e-base')
+		
+		# comment for web deployment
+        #model_dir = os.path.join(project_root, 'm3e-base')
+        #self.tokenizer = AutoTokenizer.from_pretrained(model_dir, trust_remote_code=True)
+        #self.model = AutoModel.from_pretrained(model_dir, trust_remote_code=True)
 
-        self.tokenizer = AutoTokenizer.from_pretrained(model_dir, trust_remote_code=True)
-        self.model = AutoModel.from_pretrained(model_dir, trust_remote_code=True)
+        model_name = "moka-ai/m3e-base"
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+        self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
 
     def embed(self, text):
         if isinstance(text, list):
