@@ -18,8 +18,11 @@ class QAPipeline:
         chunks = []
         for doc in documents:
             chunks.extend(self.retriever.split_text(doc))
-        embeddings = [self.embedder.embed(chunk) for chunk in chunks]
-        self.store.add(np.vstack(embeddings), chunks)
+    
+        print(f"🧠 Embedding {len(chunks)} chunks...")
+        embeddings = self.embedder.embed_batch(chunks, batch_size=8)
+        self.store.add(embeddings, chunks)
+        print("✅ FAISS index built.")
 
     def answer(self, user_question):
         query_embedding = self.embedder.embed(user_question).reshape(1, -1)

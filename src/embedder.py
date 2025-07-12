@@ -29,3 +29,13 @@ class Embedder:
             embeddings = self.model(**tokens).last_hidden_state.mean(dim=1)
 
         return embeddings.squeeze().cpu().numpy()
+
+    def embed_batch(self, texts, batch_size=8):
+        all_embeddings = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i + batch_size]
+            tokens = self.tokenizer(batch, padding=True, truncation=True, return_tensors='pt')
+            with torch.no_grad():
+                outputs = self.model(**tokens).last_hidden_state.mean(dim=1)
+                all_embeddings.append(outputs.cpu().numpy())
+        return np.vstack(all_embeddings)
