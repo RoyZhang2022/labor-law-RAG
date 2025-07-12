@@ -8,7 +8,6 @@ app = FastAPI()
 
 qa_pipeline = QAPipeline()
 
-# 加载知识库
 def load_documents(filepath):
     documents = []
     with open(filepath, 'r', encoding='utf-8') as f:
@@ -18,22 +17,14 @@ def load_documents(filepath):
                 documents.append(line)
     return documents
 
-start_time = time.time()
-project_root = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(project_root, 'data', 'documents.txt')
-
-print("file path is ", file_path)
-print("loading documents...")
-documents = load_documents(file_path)
-print(f"loaded {len(documents)} documents")
-
-qa_pipeline.build_knowledge_base(documents)
-print("knowledge base built")
-
-#documents = load_documents(file_path)
-#qa_pipeline.build_knowledge_base(documents)
-
-print(f"QA系统启动完成，耗时 {time.time() - start_time:.2f} 秒")
+@app.on_event("startup")
+async def startup_event():
+    print("📚 Loading documents and building knowledge base...")
+    project_root = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(project_root, 'data', 'documents.txt')
+    documents = load_documents(file_path)
+    qa_pipeline.build_knowledge_base(documents)
+    print("✅ QA system ready.")
 
 class QueryRequest(BaseModel):
     question: str
@@ -49,4 +40,3 @@ async def get_answer(request: QueryRequest):
 @app.get("/")
 async def health_check():
     return {"status": "ok"}
-
