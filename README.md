@@ -22,9 +22,7 @@
 git clone https://github.com/RoyZhang2022/labor-law-RAG.git
 ```
 
-1. 到hugging face去下载moka-ai/m3e-base向量检索模型，将其放置于m3e-base目录下。
-
-2. 安装依赖
+1. 安装依赖
 创建虚拟环境并安装：
 
 ```
@@ -33,21 +31,21 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-3. 配置环境变量
+2. 配置环境变量
 新建 .env 文件（推荐），或者直接编辑：
 
 ```
-sudo nano /etc/qa-api.env
+sudo vi /etc/qa-api.env
 ```
 
 写入你的智谱API Key：
 
 GLM4_API_KEY=你的真实APIKey
 
-4. 配置 Systemd 服务
+3. 配置 Systemd 服务
 新建 qa-api.service 文件：
 ```
-sudo nano /etc/systemd/system/qa-api.service
+sudo vi /etc/systemd/system/qa-api.service
 ```
 
 填入以下内容（注意路径根据实际情况调整）：
@@ -68,7 +66,7 @@ RestartSec=5
 WantedBy=multi-user.target
 ```
 
-5. 配置 Nginx
+4. 配置 Nginx
 ```
 sudo apt update
 sudo apt install nginx -y
@@ -76,7 +74,7 @@ sudo apt install nginx -y
 
 创建 Nginx 配置文件：
 ```
-sudo nano /etc/nginx/sites-available/qa-api
+sudo vi /etc/nginx/sites-available/qa-api
 ```
 
 内容如下：
@@ -107,20 +105,20 @@ sudo nginx -t
 sudo systemctl restart nginx
 ```
 
-6. 部署前端网页
+5. 部署前端网页
 ```
 sudo mkdir -p /var/www/html
 sudo cp frontend/simple_ui.html /var/www/html/index.html
 ```
 
-7. 启动后端服务
+6. 启动后端服务
 ```
 sudo systemctl daemon-reload
 sudo systemctl enable qa-api
 sudo systemctl start qa-api
 ```
 
-8. 浏览器访问
+7. 浏览器访问
 打开浏览器，访问你的服务器公网IP：
 http://你的服务器IP/
 输入问题，比如：
